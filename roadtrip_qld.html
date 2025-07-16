@@ -1,47 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roadtrip Australie</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <style>
-    body, html { margin:0; padding:0; height:100%; }
-    #map { width: 100%; height: 90vh; }
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Planisphère de Voyages</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
-  <h1 style="text-align:center">Mon Roadtrip en Australie</h1>
-  <div id="map"></div>
+<div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    var map = L.map('map').setView([-20.9176, 142.7028], 5); // Focus sur le nord-est de l'Australie
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.5.1/gpx.min.js"></script>
+<script>
+    // Initialisation de la carte
+    var map = L.map('map').setView([20, 0], 2);
 
+    // Fond de carte OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '&copy; OpenStreetMap contributors'
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    var points = [
-      { lat: -16.9186, lng: 145.7781, title: "Cairns", description: "Départ du roadtrip" },
-      { lat: -16.4833, lng: 145.4653, title: "Port Douglas", description: "Plages et Grande Barrière de Corail" },
-      { lat: -18.2400, lng: 144.6290, title: "Undara", description: "Parc national volcanique et tunnels de lave" },
-      { lat: -19.1486, lng: 146.8509, title: "Magnetic Island", description: "Île magnifique proche de Townsville" },
-      { lat: -20.2675, lng: 148.7169, title: "Airlie Beach", description: "Porte d'entrée des Whitsundays" },
-      { lat: -26.3980, lng: 153.0901, title: "Noosa", description: "Charmante station balnéaire" },
-      { lat: -27.4698, lng: 153.0251, title: "Brisbane", description: "Fin du roadtrip" }
+    // Exemple de tracés GPX
+    var voyages = [
+        { file: 'gpx/voyage1.gpx', color: 'red', name: 'Voyage 1' },
+        { file: 'gpx/voyage2.gpx', color: 'blue', name: 'Voyage 2' }
     ];
 
-    points.forEach(function(p) {
-      var marker = L.marker([p.lat, p.lng]).addTo(map);
-      marker.bindPopup(`<b>${p.title}</b><br>${p.description}`);
+    voyages.forEach(function(voyage) {
+        var gpx = new L.GPX(voyage.file, {
+            async: true,
+            polyline_options: {
+                color: voyage.color,
+                weight: 4,
+                opacity: 0.75
+            },
+            marker_options: {
+                startIconUrl: null,
+                endIconUrl: null,
+                shadowUrl: null
+            }
+        }).on('loaded', function(e) {
+            console.log(voyage.name + ' chargé');
+
+            // On rend le tracé cliquable pour zoomer dessus
+            gpx.on('click', function() {
+                map.fitBounds(gpx.getBounds());
+            });
+        }).addTo(map);
     });
 
-    var latlngs = points.map(p => [p.lat, p.lng]);
-    L.polyline(latlngs, {color: 'blue'}).addTo(map);
-  </script>
+</script>
 
 </body>
 </html>
