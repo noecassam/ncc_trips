@@ -30,7 +30,7 @@
 
     // Exemple de tracés GPX
     var voyages = [
-        { file: 'gpx/gr49_0.gpx', color: 'red', name: 'Voyage 1' },
+        { file: 'gpx/gr49.gpx', color: 'red', name: 'GR49 (en 5j) - 08/2024' },
     ];
 
     voyages.forEach(function(voyage) {
@@ -44,15 +44,36 @@
             marker_options: {
                 startIconUrl: null,
                 endIconUrl: null,
-                shadowUrl: null
+                shadowUrl: null,
+                wptIcons: {
+                    '': new L.DivIcon({
+                        className: 'waypoint-number',
+                        html: '<div style="background:#fff;border:1px solid #000;border-radius:50%;width:20px;height:20px;line-height:20px;text-align:center;font-size:12px;">#</div>',
+                        iconSize: [20, 20]
+                    })
+                }
             }
         }).on('loaded', function(e) {
             console.log(voyage.name + ' chargé');
 
-            // On rend le tracé cliquable pour zoomer dessus
+            // Numérotation des waypoints
+            var index = 1;
+            e.target.get_waypoints().forEach(function(wpt) {
+                L.marker([wpt.lat, wpt.lon], {
+                    icon: L.divIcon({
+                        className: 'waypoint-number',
+                        html: '<div style="background:#fff;border:1px solid #000;border-radius:50%;width:20px;height:20px;line-height:20px;text-align:center;font-size:12px;">' + index + '</div>',
+                        iconSize: [20, 20]
+                    })
+                }).addTo(map);
+                index++;
+            });
+
+            // Rendre le tracé cliquable pour zoomer dessus
             gpx.on('click', function() {
                 map.fitBounds(gpx.getBounds());
             });
+
         }).addTo(map);
     });
 
