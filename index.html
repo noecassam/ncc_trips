@@ -2,38 +2,49 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mes Randonnées GR49</title>
-
-  <link rel="icon" href="data:," />
-
-  <!-- Leaflet CSS -->
+  <title>Mes Randonnées</title>
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet/dist/leaflet.css"
   />
-
   <style>
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+    }
     #map {
-      height: 600px;
-      width: 90%;
-      margin: auto;
-      border: 2px solid #ccc;
+      height: 100vh;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <h1>Trips</h1>
-
   <div id="map"></div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-  <!-- Leaflet Omnivore plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
+  <script>
+    // Initialise la carte centrée sur l'Europe avec zoom dézoomé
+    const map = L.map('map').setView([46, 6], 5);
 
-  <!-- Ton script JS -->
-  <script src="script.js"></script>
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Charge le fichier trips.json et place les marqueurs
+    fetch('trips.json')
+      .then(response => response.json())
+      .then(trips => {
+        trips.forEach(trip => {
+          const marker = L.marker([trip.lat, trip.lon]).addTo(map);
+          marker.bindPopup(`
+            <strong>${trip.nom}</strong><br/>
+            Distance : ${trip.distance}<br/>
+            Dénivelé : ${trip.denivele}<br/>
+            <a href="${trip.detailPage}">Voir détails</a>
+          `);
+        });
+      })
+      .catch(err => console.error('Erreur chargement trips.json', err));
+  </script>
 </body>
 </html>
