@@ -10,7 +10,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 const randos = [
     {
         nom: "GR 49 - 5J - 08/2024",
-        fichier: "gpx/gr49.gpx",
+        fichier: "gpx/gr49_0.gpx",
         couleur: "green"
     },
 ];
