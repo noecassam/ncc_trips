@@ -10,7 +10,7 @@ const randos = [
   {
     nom: "GR49",
     fichier: "gpx/gr49_0.gpx",
-    couleur: "green"
+    couleur: "red"
   }
 ];
 
