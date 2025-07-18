@@ -15,12 +15,12 @@ fetch('trips.json')
       const couleur = couleurParType[trip.type] || "gray"; // gris par défaut
 
       const marker = L.circleMarker([trip.lat, trip.lon], {
-        radius: 8,
+        radius: 6,           // taille un peu plus petite (avant 8)
         fillColor: couleur,
-        color: couleur,
-        weight: 1,
+        color: 'white',      // bordure blanche
+        weight: 2,           // épaisseur de la bordure
         opacity: 1,
-        fillOpacity: 0.8
+        fillOpacity: 0.9
       }).addTo(map);
 
       marker.bindPopup(`
