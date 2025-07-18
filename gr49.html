@@ -31,6 +31,9 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
 
+  <!-- Charge la définition des couleurs centralisée -->
+  <script src="js/colors.js"></script>
+
   <script>
     fetch('trips.json')
       .then(response => response.json())
@@ -41,7 +44,7 @@
           return;
         }
 
-        // Affiche les infos texte
+        // Affiche les infos
         document.getElementById('nom').textContent = trip.nom;
         document.getElementById('distance').textContent = trip.distance;
         document.getElementById('denivele').textContent = trip.denivele;
@@ -53,10 +56,18 @@
           attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Charge la trace GPX et ajoute-la à la carte
+        // Récupère la couleur selon le type via colors.js
+        const couleurTrace = couleurParType[trip.type] || "gray";
+
+        // Charge la trace GPX avec la couleur associée
         omnivore.gpx(trip.gpxFile)
           .on('ready', function() {
-            this.addTo(map);
+            this.setStyle({
+              color: couleurTrace,
+              weight: 4,
+              opacity: 0.9
+            }).addTo(map);
+
             map.fitBounds(this.getBounds());
           })
           .on('error', function(e) {
@@ -69,3 +80,4 @@
   </script>
 </body>
 </html>
+
