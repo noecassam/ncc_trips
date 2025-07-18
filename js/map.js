@@ -1,9 +1,4 @@
-// Définition des couleurs par type
-const couleurParType = {
-  "Rando": "orange",
-  "Trail": "red",
-  "Swim": "blue"
-};
+// couleurParType est déjà défini dans colors.js
 
 // Initialise la carte centrée sur l'Europe
 const map = L.map('map').setView([46, 6], 5);
