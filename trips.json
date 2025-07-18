@@ -1,0 +1,12 @@
+[
+  {
+    "nom": "GR49",
+    "lat": 43.4236,
+    "lon": 6.7691,
+    "distance": "120 km",
+    "denivele": "3000 m",
+    "detailPage": "gr49.html",
+    "gpxFile": "gpx/gr49.gpx",
+    "type": "Randonnée"
+  }
+]
