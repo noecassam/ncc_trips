@@ -1,23 +1,33 @@
-// Association type → couleur
+// Définition des couleurs par type
 const couleurParType = {
   "Rando": "orange",
   "Trail": "red",
-  "Swim": "purple",
+  "Swim": "blue"
 };
 
-// Initialise la carte centrée sur l'Europe avec un zoom large
+// Initialise la carte centrée sur l'Europe
 const map = L.map('map').setView([46, 6], 5);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Charge le fichier trips.json et place les marqueurs
+// Charge trips.json et place les marqueurs avec couleur selon type
 fetch('trips.json')
   .then(response => response.json())
   .then(trips => {
     trips.forEach(trip => {
-      const marker = L.marker([trip.lat, trip.lon]).addTo(map);
+      const couleur = couleurParType[trip.type] || "gray"; // gris par défaut
+
+      const marker = L.circleMarker([trip.lat, trip.lon], {
+        radius: 8,
+        fillColor: couleur,
+        color: couleur,
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      }).addTo(map);
+
       marker.bindPopup(`
         <strong>${trip.nom}</strong><br/>
         Distance : ${trip.distance}<br/>
