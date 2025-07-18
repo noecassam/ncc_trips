@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Détails GR49</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 80vh;
+      width: 90%;
+      margin: 1rem auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 1rem;
+      background: #f9f9f9;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="nom"></h1>
+  <p>Distance : <span id="distance"></span></p>
+  <p>Dénivelé : <span id="denivele"></span></p>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
+
+  <script>
+    fetch('trips.json')
+      .then(response => response.json())
+      .then(trips => {
+        const trip = trips.find(t => t.nom === 'GR49');
+        if (!trip) {
+          alert('Rando GR49 non trouvée dans trips.json');
+          return;
+        }
+
+        // Affiche les infos texte
+        document.getElementById('nom').textContent = trip.nom;
+        document.getElementById('distance').textContent = trip.distance;
+        document.getElementById('denivele').textContent = trip.denivele;
+
+        // Initialise la carte centrée sur la rando
+        const map = L.map('map').setView([trip.lat, trip.lon], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Charge la trace GPX et ajoute-la à la carte
+        omnivore.gpx(trip.gpxFile)
+          .on('ready', function() {
+            this.addTo(map);
+            map.fitBounds(this.getBounds());
+          })
+          .on('error', function(e) {
+            console.error('Erreur chargement GPX:', e);
+          });
+      })
+      .catch(err => {
+        console.error('Erreur chargement trips.json', err);
+      });
+  </script>
+</body>
+</html>
