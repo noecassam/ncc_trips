@@ -1,3 +1,10 @@
+// Association type → couleur
+const couleurParType = {
+  "Rando": "orange",
+  "Trail": "red",
+  "Swim": "purple",
+};
+
 // Initialise la carte centrée sur l'Europe avec un zoom large
 const map = L.map('map').setView([46, 6], 5);
 
