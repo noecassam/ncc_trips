@@ -1,28 +1,27 @@
-// Crée la carte
-const map = L.map('map').setView([46.5, 2.5], 6);  // Coordonnées centrées sur la France
+const map = L.map('map').setView([50.5, 10], 4); // Centre approximatif de l'Europe, zoom 4
 
 // Fond de carte OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+  attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Liste de tes randonnées
+// Liste des randos à charger
 const randos = [
-    {
-        nom: "GR 49 - 5J - 08/2024",
-        fichier: "gpx/gr49_0.gpx",
-        couleur: "red"
-    },
+  {
+    nom: "GR49",
+    fichier: "gpx/gr49_0.gpx",
+    couleur: "green"
+  }
 ];
 
-// Charge chaque fichier GPX
+// Chargement et affichage des GPX avec couleur
 randos.forEach(rando => {
-    new L.GPX(rando.fichier, {
-        async: true,
-        polyline_options: {
-            color: rando.couleur
-        }
-    }).on('loaded', function(e) {
-        map.fitBounds(e.target.getBounds());
-    }).addTo(map);
+  omnivore.gpx(rando.fichier)
+    .on('ready', function() {
+      this.eachLayer(layer => {
+        layer.setStyle({ color: rando.couleur });
+      });
+      map.fitBounds(this.getBounds()); // Ajuste la vue sur la rando chargée
+    })
+    .addTo(map);
 });
