@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Randos avec Omnivore</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mes Randonnées GR49</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<style>
-  #map { height: 600px; width: 90%; margin: auto; }
-</style>
+  <link rel="icon" href="data:," />
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+
+  <style>
+    #map {
+      height: 600px;
+      width: 90%;
+      margin: auto;
+      border: 2px solid #ccc;
+    }
+  </style>
 </head>
 <body>
+  <h1>Trips</h1>
 
-<h1>Mes Randonnées</h1>
-<div id="map"></div>
+  <div id="map"></div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<script>
-const map = L.map('map').setView([46.5, 2.5], 6);
+  <!-- Leaflet Omnivore plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-
-omnivore.gpx('gpx/gr49_0.gpx')
-  .on('ready', function() {
-    map.fitBounds(this.getBounds());
-  })
-  .addTo(map);
-</script>
-
+  <!-- Ton script JS -->
+  <script src="script.js"></script>
 </body>
 </html>
